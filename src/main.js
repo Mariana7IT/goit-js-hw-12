@@ -17,8 +17,8 @@ import {
 const form = document.querySelector('.form');
 const searchInput = document.querySelector('.search-input');
 const loadMoreButton = document.getElementById('load-more');
-loadMoreButton.textContent = 'Load more';
 
+document.querySelector('#load-more').textContent = 'Load more';
 
 let currentQuery = '';
 
@@ -38,7 +38,7 @@ async function handleSubmit(event) {
   clearGallery();
   hideLoadMoreButton();
   showLoader();
-
+  
   try {
     const data = await fetchImages(currentQuery, true);
     if (data.hits.length === 0) {
@@ -68,6 +68,7 @@ async function handleLoadMore() {
       renderImages(data.hits);
       refreshLightbox();
       scrollPage();
+      smoothScroll();
     }
   } catch (error) {
     showError('An error occurred while fetching images');
@@ -77,5 +78,14 @@ async function handleLoadMore() {
   }
 }
 
+document.addEventListener('DOMContentLoaded', smoothScroll);
 
+function smoothScroll() {
+  const galleryItemHeight = document.querySelector('.gallery-item').getBoundingClientRect().height;
+  
+  window.scrollBy({
+    top: galleryItemHeight * 2,
+    behavior: 'smooth' 
+  });
+}
 
