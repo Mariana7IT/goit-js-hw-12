@@ -1,46 +1,76 @@
 'use strict';
 
 import { fetchImages } from './js/pixabay-api';
-import { renderImages, showError, clearGallery, showLoader, hideLoader, initializeLightbox, refreshLightbox } from './js/render-functions';
-
+import {
+  renderImages,
+  showError,
+  clearGallery,
+  showLoader,
+  hideLoader,
+  initializeLightbox,
+  refreshLightbox,
+  showLoadMoreButton,
+  hideLoadMoreButton,
+  scrollPage
+} from './js/render-functions';
 
 const form = document.querySelector('.form');
 const searchInput = document.querySelector('.search-input');
-const span = document.querySelector('.loader');
+const loadMoreButton = document.getElementById('load-more');
+
+let currentQuery = '';
 
 form.addEventListener('submit', handleSubmit);
+loadMoreButton.addEventListener('click', handleLoadMore);
 
-function handleSubmit(event) {
+async function handleSubmit(event) {
   event.preventDefault();
 
-  const query = searchInput.value.trim();
+  currentQuery = searchInput.value.trim();
 
-  if (!query) {
+  if (!currentQuery) {
     showError('Please enter a search term');
     return;
+  }
+
+  clearGallery();
+  hideLoadMoreButton();
+  showLoader();
+
+  try {
+    const data = await fetchImages(currentQuery, true);
+    if (data.hits.length === 0) {
+      showError('Sorry, there are no images matching your search query. Please try again!');
+    } else {
+      renderImages(data.hits);
+      showLoadMoreButton();
+      refreshLightbox();
     }
-    clearGallery();
-    showLoader();
-
-  fetchImages(query)
-    .then(images => {
-      if (images.length === 0) {
-        showError(
-          'Sorry, there are no images matching your search query. Please try again!'
-        );
-      } else {
-          renderImages(images);
-          initializeLightbox();
-          refreshLightbox();
-      }
-    })
-    .catch(error => {
-      showError('An error occured while fetching images');
-      console.error(error);
-    })
-      .finally(() => {
-          hideLoader();
-      });
-
+  } catch (error) {
+    showError('An error occurred while fetching images');
+    console.error(error);
+  } finally {
+    hideLoader();
+  }
 }
 
+async function handleLoadMore() {
+  showLoader();
+
+  try {
+    const data = await fetchImages(currentQuery);
+    if (data.hits.length === 0) {
+      showError("We're sorry, but you've reached the end of search results.");
+      hideLoadMoreButton();
+    } else {
+      renderImages(data.hits);
+      refreshLightbox();
+      scrollPage();
+    }
+  } catch (error) {
+    showError('An error occurred while fetching images');
+    console.error(error);
+  } finally {
+    hideLoader();
+  }
+}

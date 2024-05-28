@@ -9,7 +9,7 @@ let lightbox;
 const container = document.querySelector('.container');
 const gallery = document.querySelector('.gallery');
 const loader = document.getElementById('loader');
-
+const loadMoreButton = document.getElementById('load-more');
 
 export function renderImages(images) {
 
@@ -56,7 +56,13 @@ export function showLoader() {
 export function hideLoader() {
   loader.style.display = 'none';
 }
+export function showLoadMoreButton() {
+  loadMoreButton.style.display = 'block';
+}
 
+export function hideLoadMoreButton() {
+  loadMoreButton.style.display = 'none';
+}
 export function initializeLightbox() {
   lightbox = new simpleLightbox('.gallery a', {
     captionsData: 'alt',
@@ -70,4 +76,12 @@ export function refreshLightbox() {
   } else {
     initializeLightbox();
   }
+}
+
+export function scrollPage() {
+  const { height: cardHeight } = gallery.firstElementChild.getBoundingClientRect();
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
