@@ -1,9 +1,8 @@
-
 'use strict';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import simpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import simpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 let lightbox;
 const container = document.querySelector('.container');
@@ -12,7 +11,6 @@ const loader = document.getElementById('loader');
 const loadMoreButton = document.getElementById('load-more');
 
 export function renderImages(images) {
-
   const imageMarkup = images
     .map(
       img => `<li class="gallery-item">
@@ -25,18 +23,17 @@ export function renderImages(images) {
         />
       </a>
       <ul class='description'>
-  <li class="info-title"><strong>Likes</strong><span class="info-text"> ${img.likes}</span></li>
-  <li class="info-title"><strong>Views</strong><span class="info-text"> ${img.views}</span></li>
-  <li class="info-title"><strong>Comments</strong><span class="info-text"> ${img.comments}</span></li>
-  <li class="info-title"><strong>Downloads</strong><span class="info-text"> ${img.downloads}</span></li>
-</ul>
+        <li class="info-title"><strong>Likes</strong><span class="info-text"> ${img.likes}</span></li>
+        <li class="info-title"><strong>Views</strong><span class="info-text"> ${img.views}</span></li>
+        <li class="info-title"><strong>Comments</strong><span class="info-text"> ${img.comments}</span></li>
+        <li class="info-title"><strong>Downloads</strong><span class="info-text"> ${img.downloads}</span></li>
+      </ul>
     </li>`
     )
     .join('');
-    
-    gallery.innerHTML = imageMarkup;
-}
 
+  gallery.insertAdjacentHTML('beforeend', imageMarkup);
+}
 
 export function showError(message) {
   iziToast.error({
@@ -56,6 +53,7 @@ export function showLoader() {
 export function hideLoader() {
   loader.style.display = 'none';
 }
+
 export function showLoadMoreButton() {
   loadMoreButton.style.display = 'block';
 }
@@ -63,6 +61,7 @@ export function showLoadMoreButton() {
 export function hideLoadMoreButton() {
   loadMoreButton.style.display = 'none';
 }
+
 export function initializeLightbox() {
   lightbox = new simpleLightbox('.gallery a', {
     captionsData: 'alt',
