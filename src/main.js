@@ -17,6 +17,8 @@ import {
 const form = document.querySelector('.form');
 const searchInput = document.querySelector('.search-input');
 const loadMoreButton = document.getElementById('load-more');
+loadMoreButton.textContent = 'Load more';
+
 
 let currentQuery = '';
 
@@ -74,3 +76,6 @@ async function handleLoadMore() {
     hideLoader();
   }
 }
+
+
+
