@@ -18,7 +18,7 @@ const form = document.querySelector('.form');
 const searchInput = document.querySelector('.search-input');
 const loadMoreButton = document.getElementById('load-more');
 
-document.querySelector('#load-more').textContent = 'Load more';
+// document.querySelector('#load-more').textContent = 'Load more';
 
 let currentQuery = '';
 
@@ -38,7 +38,7 @@ async function handleSubmit(event) {
   clearGallery();
   hideLoadMoreButton();
   showLoader();
-  
+ 
   try {
     const data = await fetchImages(currentQuery, true);
     if (data.hits.length === 0) {

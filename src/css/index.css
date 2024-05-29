@@ -211,6 +211,7 @@ button:hover, button:focus{
 #load-more {
   display: flex;
   justify-content: center;
+  align-items: center; 
   width: 125px;
   height: 40px;
   padding: 8px 16px;
@@ -221,14 +222,15 @@ button:hover, button:focus{
   line-height: 1.5;
   letter-spacing: 0.04em;
   border-radius: 8px;
-  background-color: #4E75FF;
+  background-color:#4E75FF;
   border: none;
   cursor: pointer;
+  white-space: nowrap;
 }
 
-#load-more:hover{
+  #load-more:focus, #load-more:hover { 
     border-radius: 8px;
-    background: #6C8CFF;
+    background-color: #6C8CFF;
 }
 
 
