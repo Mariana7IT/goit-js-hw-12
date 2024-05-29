@@ -17,8 +17,9 @@ import {
 const form = document.querySelector('.form');
 const searchInput = document.querySelector('.search-input');
 const loadMoreButton = document.getElementById('load-more');
+const loadingText = document.getElementById('loading-text');
 
-// document.querySelector('#load-more').textContent = 'Load more';
+document.querySelector('#load-more').textContent = 'Load more';
 
 let currentQuery = '';
 
@@ -38,7 +39,8 @@ async function handleSubmit(event) {
   clearGallery();
   hideLoadMoreButton();
   showLoader();
- 
+  loadingText.style.display = 'block'; // Показуємо текст завантаження
+
   try {
     const data = await fetchImages(currentQuery, true);
     if (data.hits.length === 0) {
@@ -53,11 +55,14 @@ async function handleSubmit(event) {
     console.error(error);
   } finally {
     hideLoader();
+    loadingText.style.display = 'none'; 
   }
 }
 
 async function handleLoadMore() {
   showLoader();
+  loadMoreButton.style.display = 'none'; 
+  loadingText.style.display = 'block'; 
 
   try {
     const data = await fetchImages(currentQuery);
@@ -68,13 +73,14 @@ async function handleLoadMore() {
       renderImages(data.hits);
       refreshLightbox();
       scrollPage();
-      smoothScroll();
     }
   } catch (error) {
     showError('An error occurred while fetching images');
     console.error(error);
   } finally {
     hideLoader();
+    loadMoreButton.style.display = 'block'; 
+    loadingText.style.display = 'none'; 
   }
 }
 
@@ -88,4 +94,3 @@ function smoothScroll() {
     behavior: 'smooth' 
   });
 }
-
