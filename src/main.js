@@ -22,6 +22,8 @@ const loadingText = document.getElementById('loading-text');
 document.querySelector('#load-more').textContent = 'Load more';
 
 let currentQuery = '';
+let totalHits = 0; 
+let loadedHits = 0; 
 
 form.addEventListener('submit', handleSubmit);
 loadMoreButton.addEventListener('click', handleLoadMore);
@@ -39,16 +41,21 @@ async function handleSubmit(event) {
   clearGallery();
   hideLoadMoreButton();
   showLoader();
-  loadingText.style.display = 'block'; // Показуємо текст завантаження
+  loadingText.style.display = 'block'; 
 
   try {
     const data = await fetchImages(currentQuery, true);
-    if (data.hits.length === 0) {
+    totalHits = data.totalHits; 
+    loadedHits = data.hits.length; 
+
+    if (loadedHits === 0) {
       showError('Sorry, there are no images matching your search query. Please try again!');
     } else {
       renderImages(data.hits);
-      showLoadMoreButton();
       refreshLightbox();
+      if (loadedHits < totalHits) { 
+        showLoadMoreButton();
+      }
     }
   } catch (error) {
     showError('An error occurred while fetching images');
@@ -66,20 +73,24 @@ async function handleLoadMore() {
 
   try {
     const data = await fetchImages(currentQuery);
-    if (data.hits.length === 0) {
+    loadedHits += data.hits.length;
+
+    if (loadedHits >= totalHits) {
       showError("We're sorry, but you've reached the end of search results.");
       hideLoadMoreButton();
     } else {
       renderImages(data.hits);
       refreshLightbox();
       scrollPage();
+      if (loadedHits < totalHits) { 
+        showLoadMoreButton();
+      }
     }
   } catch (error) {
     showError('An error occurred while fetching images');
     console.error(error);
   } finally {
     hideLoader();
-    loadMoreButton.style.display = 'block'; 
     loadingText.style.display = 'none'; 
   }
 }
