@@ -98,10 +98,12 @@ async function handleLoadMore() {
 document.addEventListener('DOMContentLoaded', smoothScroll);
 
 function smoothScroll() {
-  const galleryItemHeight = document.querySelector('.gallery-item').getBoundingClientRect().height;
-  
-  window.scrollBy({
-    top: galleryItemHeight * 2,
-    behavior: 'smooth' 
-  });
+  const galleryItem = document.querySelector('.gallery-item');
+  if (galleryItem) {
+    const galleryItemHeight = galleryItem.getBoundingClientRect().height;
+    window.scrollBy({
+      top: galleryItemHeight * 2,
+      behavior: 'smooth'
+    });
+  }
 }
