@@ -53,6 +53,7 @@ async function handleSubmit(event) {
     } else {
       renderImages(data.hits);
       refreshLightbox();
+
       if (loadedHits < totalHits) { 
         showLoadMoreButton();
       }
@@ -75,16 +76,15 @@ async function handleLoadMore() {
     const data = await fetchImages(currentQuery);
     loadedHits += data.hits.length;
 
+    renderImages(data.hits);
+    refreshLightbox();
+    scrollPage();
+
     if (loadedHits >= totalHits) {
       showError("We're sorry, but you've reached the end of search results.");
       hideLoadMoreButton();
     } else {
-      renderImages(data.hits);
-      refreshLightbox();
-      scrollPage();
-      if (loadedHits < totalHits) { 
-        showLoadMoreButton();
-      }
+      showLoadMoreButton();
     }
   } catch (error) {
     showError('An error occurred while fetching images');
